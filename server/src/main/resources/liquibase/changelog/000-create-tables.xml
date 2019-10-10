@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <changeSet author="Kris" id="1">
+        <preConditions onFail="HALT">
+            <not>
+                <tableExists schemaName="public" tableName="beers"/>
+            </not>
+        </preConditions>
+        <createTable tableName="beers">
+            <column name="id" type="integer" autoIncrement="true">
+                <constraints nullable="false"/>
+            </column>
+            <column name="title" type="text"/>
+            <column name="rank" type="decimal"/>
+            <column name="image_link" type="text"/>
+        </createTable>
+        <addPrimaryKey columnNames="id" constraintName="beer__pkey" tableName="beers"/>
+    </changeSet>
+    <changeSet author="Kris" id="2">
+        <preConditions onFail="HALT">
+            <not>
+                <tableExists schemaName="public" tableName="beer_reviews"/>
+            </not>
+        </preConditions>
+        <createTable tableName="beer_reviews">
+            <column name="id" type="integer" autoIncrement="true">
+                <constraints nullable="false"/>
+            </column>
+            <column name="comment" type="text"/>
+            <column name="rank" type="decimal"/>
+            <column name="username" type="text"/>
+            <column name="beer_id" type="integer">
+                <constraints nullable="false" foreignKeyName="fk_review_beer_id" references="beers(id)"/>
+            </column>
+        </createTable>
+        <addPrimaryKey columnNames="id" constraintName="beer_reviews__pkey" tableName="beer_reviews"/>
+    </changeSet>
+
+
+</databaseChangeLog>

@@ -1,0 +1,26 @@
+POST {{host}}/beers
+Content-Type: application/json
+
+{
+  "title": "BIRA2",
+  "rank": 4.5,
+  "imageLink": "http://asd.com"
+}
+
+###
+GET {{host}}/beers
+
+###
+GET {{host}}/beers/1
+
+###
+
+POST {{host}}/reviews/1
+Content-Type: application/json
+
+{
+  "rank": 2,
+  "comment": "WOW"
+}
+
+###

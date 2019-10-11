@@ -3,14 +3,26 @@ jdk: oraclejdk8
 dist: trusty
 services:
   - docker
-
 cache:
   directories:
     - "$HOME/.m2"
 
+before_install:
+  - openssl aes-256-cbc -K $encrypted_13cbe7d947c7_key -iv $encrypted_13cbe7d947c7_iv -in ./k8s/config.yaml.enc -out ./k8s/config.yaml -d
+  - mkdir $HOME/.kube
+  - mv ./k8s/config.yaml $HOME/.kube/config
+  - curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
+  - chmod +x ./kubectl
+  - sudo mv ./kubectl /usr/local/bin/kubectl
+  - curl https://raw.githubusercontent.com/kubernetes/helm/master/scripts/get > get_helm.sh
+  - chmod 700 get_helm.sh
+  - sudo ./get_helm.sh --version v2.9.1
+  - helm init -c
 script:
   - mvn clean install
   - echo "$DOCKER_API_KEY" | docker login -u "$DOCKER_USER" --password-stdin
   - docker build -t kristiyang/hackconf:beer-service-$TRAVIS_BUILD_NUMBER ./server
   - docker push kristiyang/hackconf:beer-service-$TRAVIS_BUILD_NUMBER
+  - helm upgrade --set postgresql.postgresqlDatabase=beers-db --set postgresql.postgresqlUsername=db-user --set postgresql.postgresqlPassword=$DB_PASS --set image.tag=beer-service-$TRAVIS_BUILD_NUMBER --set db.pass=$DB_PASS beers ./k8s/beer-service/
   - echo "Done"
+

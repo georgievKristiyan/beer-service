@@ -10,6 +10,7 @@ cache:
 
 script:
   - mvn clean install
+  - echo "$DOCKER_API_KEY" | docker login -u "$DOCKER_USER" --password-stdin
   - docker build -t kristiyang/hackconf:beer-service-$TRAVIS_BUILD_NUMBER ./server
   - docker push kristiyang/hackconf:beer-service-$TRAVIS_BUILD_NUMBER
   - echo "Done"

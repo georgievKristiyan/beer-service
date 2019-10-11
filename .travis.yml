@@ -10,3 +10,5 @@ cache:
 
 script:
   - mvn clean install
+  - docker build -t kristiyang/hackconf:beer-service-$TRAVIS_BUILD_NUMBER ./server
+  - docker push kristiyang/hackconf:beer-service-$TRAVIS_BUILD_NUMBER

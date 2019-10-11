@@ -2,9 +2,9 @@ POST {{host}}/beers
 Content-Type: application/json
 
 {
-  "title": "BIRA2",
-  "rank": 4.5,
-  "imageLink": "http://asd.com"
+  "title": "Triple Karmeliet",
+  "rank": 5,
+  "imageLink": "https://s3.amazonaws.com/beertourprod/beers/share_pictures/000/000/036/original/tripel_karmeliet.png?1510165814"
 }
 
 ###
